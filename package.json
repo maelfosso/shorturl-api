@@ -9,22 +9,13 @@
     "author": "Bowden Kelly",
     "license": "MIT",
     "scripts": {
-        "build": "npm run build-sass && npm run build-ts && npm run lint && npm run copy-static-assets",
-        "build-sass": "node-sass src/public/css/main.scss dist/public/css/main.css",
+        "build": "npm-run-all clean build-ts",
+        "clean": "rimraf dist",
         "build-ts": "tsc",
-        "copy-static-assets": "ts-node copyStaticAssets.ts",
-        "debug": "npm run build && npm run watch-debug",
-        "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-        "serve": "node dist/server.js",
-        "serve-debug": "nodemon --inspect dist/server.js",
-        "start": "npm run serve",
+        "dev": "npm-run-all build serve",
+        "watch:dev": "nodemon",
         "test": "jest --forceExit --coverage --verbose",
-        "watch": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
-        "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\"",
-        "watch-node": "nodemon dist/server.js",
-        "watch-sass": "node-sass -w src/public/css/main.scss dist/public/css/main.css",
-        "watch-test": "npm run test -- --watchAll",
-        "watch-ts": "tsc -w"
+        "serve": "node dist/server.js"
     },
     "dependencies": {
         "async": "^3.1.0",
@@ -36,18 +27,12 @@
         "dotenv": "^8.2.0",
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
-        "express-flash": "0.0.2",
         "express-session": "^1.16.2",
         "express-validator": "^6.2.0",
         "fbgraph": "^1.4.4",
         "lodash": "^4.17.19",
         "lusca": "^1.6.1",
         "mongoose": "^5.7.5",
-        "nodemailer": "^6.3.0",
-        "passport": "^0.4.0",
-        "passport-facebook": "^3.0.0",
-        "passport-local": "^1.0.0",
-        "pug": "^2.0.4",
         "winston": "^3.2.1"
     },
     "devDependencies": {
@@ -89,10 +74,23 @@
         "jest": "^24.9.0",
         "node-sass": "^4.13.0",
         "nodemon": "^1.19.2",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2",
         "shelljs": "^0.8.3",
         "supertest": "^4.0.2",
         "ts-jest": "^24.1.0",
         "ts-node": "^8.4.1",
         "typescript": "^3.6.3"
+    },
+    "nodemonConfig": {
+        "exec": "npm run dev",
+        "watch": [
+            "src/*"
+        ],
+        "ignore": [
+            "**/__tests___",
+            "*.test.js",
+            "*.spec.js"
+        ]
     }
 }
