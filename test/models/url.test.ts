@@ -14,7 +14,7 @@ describe("Tests concerning User model", () => {
 
   it ('creates and saves Url successfully', async () => {
     const valid = new Url({
-      originalURL: "http://pbid.io/new-file-hew-ue",
+      originalURL: "https://microk8s.io/docs/troubleshooting",
       shortenURL: "http://pbid.io/u2defa8w"
     })
     const saved = await valid.save();
@@ -35,5 +35,58 @@ describe("Tests concerning User model", () => {
     expect(error.errors['originalURL']).toBeDefined();
     expect(error.errors['shortenURL']).toBeDefined();
   });
+
+  it ('reject an URL if originalURL is not a valid URL', async () => {
+    let invalid = new Url({
+      originalURL: "new-file-hew-ue",
+      shortenURL: "http://pbid.io/u2defa8w"
+    });
+    let error = invalid.validateSync();
+
+    expect(error).toBeDefined();
+    expect(error.errors['originalURL']).toBeDefined();
+  });
+
+
+
+  // it ('reject an URL if Both orginalURL and shortenURL are not URLs and doesn\'t start by http://pbidio or https://pbid.io ', async () => {
+  //   let invalid = new Url({
+  //     originalURL: "new-file-hew-ue",
+  //     shortenURL: "bid.io/u2defa8w"
+  //   });
+  //   let error = invalid.validateSync();
+    
+  //   expect(error).toBeDefined();
+  //   expect(error.errors['originalURL']).toBeDefined();
+  //   expect(error.errors['shortenURL']).toBeDefined();
+
+  //   invalid = new Url({
+  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
+  //     shortenURL: "http://bid.io/u2defa8w"
+  //   });
+  //   error = invalid.validateSync();
+    
+  //   expect(error).toBeDefined();
+  //   expect(error.errors['shortenURL']).toBeDefined();
+
+  //   invalid = new Url({
+  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
+  //     shortenURL: "http://pbid.io/u2defa8w42"
+  //   });
+  //   error = invalid.validateSync();
+    
+  //   expect(error).toBeDefined();
+  //   expect(error.errors['shortenURL']).toBeDefined();
+
+  //   invalid = new Url({
+  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
+  //     shortenURL: "http://pbid.io/u2defa2"
+  //   });
+  //   error = invalid.validateSync();
+    
+  //   expect(error).toBeDefined();
+  //   expect(error.errors['shortenURL']).toBeDefined();
+
+  // });
 
 });

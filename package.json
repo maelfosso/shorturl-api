@@ -14,7 +14,7 @@
     "build-ts": "tsc",
     "dev": "npm-run-all build serve",
     "watch:dev": "nodemon",
-    "test": "jest --forceExit --coverage --verbose",
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "serve": "node dist/server.js"
   },
   "dependencies": {
