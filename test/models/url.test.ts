@@ -22,5 +22,18 @@ describe("Tests concerning User model", () => {
     expect(saved._id).toBeDefined();
     expect(saved.originalURL).toBe(valid.originalURL);
     expect(saved.shortenURL).toBe(valid.shortenURL);
-  })
+  });
+
+  it ('reject an URL if any of its field is empty', async () => {
+    const invalid = new Url({
+      originalURL: '',
+      shortenURL: ''
+    });
+    const error = invalid.validateSync();
+
+    expect(error).toBeDefined();
+    expect(error.errors['originalURL']).toBeDefined();
+    expect(error.errors['shortenURL']).toBeDefined();
+  });
+
 });

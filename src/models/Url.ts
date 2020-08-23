@@ -6,8 +6,14 @@ export type UrlDocument = mongoose.Document & {
 };
 
 const urlSchema = new mongoose.Schema({
-  originalURL: String,
-  shortenURL: String
+  originalURL: {
+    type: String,
+    required: true
+  },
+  shortenURL: {
+    type: String,
+    required: true
+  }
 }, { timestamps: true });
 
 export const Url = mongoose.model<UrlDocument>("Url", urlSchema);
