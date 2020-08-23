@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { props } from "bluebird";
+import url from "url";
 
 export type UrlDocument = mongoose.Document & {
   originalURL: string;
@@ -14,21 +14,27 @@ const urlSchema = new mongoose.Schema({
       (v:string) => {
         return /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(v)
       },
-      '{PATH} must be an URL'
+      '{PATH} must be a valid URL'
     ]
   },
   shortenURL: {
     type: String,
     required: true,
-    // validate: [
-    //   (v:string) => {
-    //     // return /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(v)
+    validate: [
+      (v:string) => {
+        if (! /^(?:http(s)?:\/\/)(pbid.io\/.*)?$/.test(v)) {
+          return false;
+        }
 
-    //     // return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]twitter+)\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v)
-    //     return /^(?:http(s)?:\/\/)[a-z0-9]+([\-\.]pbid.io\/.*)?$/.test(v)
-    //   },
-    //   '{PATH} must be an URL of pbid.io domain'
-    // ]
+        const u = new url.URL(v);
+        if (u.pathname.length != 9) {
+          return false;
+        }
+
+        return true;
+      },
+      '{PATH} must be an URL from pbid.io domain with a pathname of length exactly equal to 8'
+    ]
   }
 }, { timestamps: true });
 

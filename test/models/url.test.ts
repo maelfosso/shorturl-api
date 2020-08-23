@@ -47,46 +47,33 @@ describe("Tests concerning User model", () => {
     expect(error.errors['originalURL']).toBeDefined();
   });
 
-
-
-  // it ('reject an URL if Both orginalURL and shortenURL are not URLs and doesn\'t start by http://pbidio or https://pbid.io ', async () => {
-  //   let invalid = new Url({
-  //     originalURL: "new-file-hew-ue",
-  //     shortenURL: "bid.io/u2defa8w"
-  //   });
-  //   let error = invalid.validateSync();
+  it ('reject an URL if shortenURL are not URLs from pbid.io domain with a path of 8 alphanumerics character', async () => {
+    let invalid = new Url({
+      originalURL: "https://www.udemy.com/course/valaxy-devops/",
+      shortenURL: "http://bid.io/u2defa8w"
+    });
+    let error = invalid.validateSync();
     
-  //   expect(error).toBeDefined();
-  //   expect(error.errors['originalURL']).toBeDefined();
-  //   expect(error.errors['shortenURL']).toBeDefined();
+    expect(error).toBeDefined();
+    expect(error.errors['shortenURL']).toBeDefined();
 
-  //   invalid = new Url({
-  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
-  //     shortenURL: "http://bid.io/u2defa8w"
-  //   });
-  //   error = invalid.validateSync();
+    invalid = new Url({
+      originalURL: "https://www.udemy.com/course/valaxy-devops/",
+      shortenURL: "http://pbid.io/u2defa8w42"
+    });
+    error = invalid.validateSync();
     
-  //   expect(error).toBeDefined();
-  //   expect(error.errors['shortenURL']).toBeDefined();
+    expect(error).toBeDefined();
+    expect(error.errors['shortenURL']).toBeDefined();
 
-  //   invalid = new Url({
-  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
-  //     shortenURL: "http://pbid.io/u2defa8w42"
-  //   });
-  //   error = invalid.validateSync();
+    invalid = new Url({
+      originalURL: "https://www.udemy.com/course/valaxy-devops/",
+      shortenURL: "http://pbid.io/u2defa2"
+    });
+    error = invalid.validateSync();
     
-  //   expect(error).toBeDefined();
-  //   expect(error.errors['shortenURL']).toBeDefined();
-
-  //   invalid = new Url({
-  //     originalURL: "https://www.udemy.com/course/valaxy-devops/",
-  //     shortenURL: "http://pbid.io/u2defa2"
-  //   });
-  //   error = invalid.validateSync();
-    
-  //   expect(error).toBeDefined();
-  //   expect(error.errors['shortenURL']).toBeDefined();
-
-  // });
+    expect(error).toBeDefined();
+    expect(error.errors['shortenURL']).toBeDefined();
+  });
 
 });
