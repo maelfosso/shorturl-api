@@ -1,14 +1,15 @@
 "use strict";
 
 import { Response, Request, NextFunction } from "express";
-import { UserDocument } from "../models/User";
+import mongoose from "mongoose";
+import { Url } from "../models/Url";
 
 
 const shorten = (num: number) => {
 	const mapAlphanumric = [
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 	];
 
 	let ds:number[] = [];
@@ -25,12 +26,12 @@ const shorten = (num: number) => {
 		}
 	}
 
-	const pathname = [];
+	const pathname:string[] = [];
 	ds.forEach(r => {
 		pathname.push(mapAlphanumric[r]);
 	});
 
-	return ds.join();
+	return pathname.join("");
 }
 
 /**
@@ -38,9 +39,29 @@ const shorten = (num: number) => {
  * @route POST /api/v1/urls
  */
 export const create = (req: Request, res: Response) => {
-	return res.json({
-		message: "Url created"
+	const id = new mongoose.Types.ObjectId();
+	const originalURL = req.body.originalURL;
+	const shortenURL = `${originalURL.startsWith("https") ? "https" : "http"}://pbid.io/${shorten(id.getTimestamp().getTime())}`;
+	const url = new Url({
+		_id: id,
+		originalURL,
+		shortenURL
 	});
+
+	url.save((err:any) => {
+		if (err) {
+			return res.status(402).json({
+				message: "An error occurred",
+				err
+			});
+		}
+
+		return res.status(201).json({
+			message: "URL successfully created",
+			url
+		});
+	});
+	
 };
 
 /**
@@ -48,7 +69,7 @@ export const create = (req: Request, res: Response) => {
  * @route GET /api/v1/urls
  */
 export const get = (req: Request, res: Response, next: NextFunction) => {
-  return res.json({
+  return res.status(201).json({
 		message: "OK",
 		urls: []
 	})

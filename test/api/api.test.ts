@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../src/app";
+import { Url, UrlDocument } from '../../src/models/Url';
 
-// import { Url } from '../../src/models/Url';
+const http = request(app);
+const API_URL = '/api/v1/urls';
 
 describe("Tests concerning Shorten URL API", () => {
 
@@ -17,11 +19,30 @@ describe("Tests concerning Shorten URL API", () => {
 
   describe('POST /api/v1/urls', () => {
 
-    it ('should return 200 OK', () => {
-      return request(app).post('/api/v1/urls')
-          .expect(200);        
+    it ('should return 20 when the original URL is not valid', () => {
+
     });
-      
+
+    it ('should return 20 when the original URL already exists', () => {
+
+    });
+
+    it ('should create a valid shorten URL when is a new valid original URL', async () => {
+      const valid = {
+        originalURL: "https://microk8s.io/docs/troubleshooting",
+        // shortenURL: "http://pbid.io/u2defa8w"
+      };
+
+      const response = await http.post(API_URL)
+        .send(valid);
+
+      expect(response.status).toBe(201);
+      expect(response.body.message).toBeDefined();
+      expect(response.body.url).toBeDefined();
+      expect(response.body.url._id).toBeDefined();
+      expect(response.body.url.originalURL).toBe(valid.originalURL);
+      expect(response.body.url.shortenURL).toBeDefined();
+    });
       
   });
 
@@ -29,7 +50,7 @@ describe("Tests concerning Shorten URL API", () => {
     
     it ('should return 200 OK', () => {
       return request(app).get('/api/v1/urls')
-          .expect(200);
+          .expect(201);
     });
 
   });
