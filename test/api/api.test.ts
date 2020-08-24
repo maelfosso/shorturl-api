@@ -19,8 +19,16 @@ describe("Tests concerning Shorten URL API", () => {
 
   describe('POST /api/v1/urls', () => {
 
-    it ('should return 20 when the original URL is not valid', () => {
+    it ('should return 20 when the original URL is not valid', async () => {
+      const invalid = {
+        originalURL: "troubleshooting"
+      };
 
+      const response = await http.post(API_URL)
+        .send(invalid);
+
+      expect(response.status).toBe(422);
+      expect(response.body.message).toBe("Invalid original URL");
     });
 
     it ('should return 20 when the original URL already exists', () => {
@@ -29,8 +37,7 @@ describe("Tests concerning Shorten URL API", () => {
 
     it ('should create a valid shorten URL when is a new valid original URL', async () => {
       const valid = {
-        originalURL: "https://microk8s.io/docs/troubleshooting",
-        // shortenURL: "http://pbid.io/u2defa8w"
+        originalURL: "https://microk8s.io/docs/troubleshooting"
       };
 
       const response = await http.post(API_URL)

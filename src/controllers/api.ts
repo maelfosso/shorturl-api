@@ -41,6 +41,12 @@ const shorten = (num: number) => {
 export const create = (req: Request, res: Response) => {
 	const id = new mongoose.Types.ObjectId();
 	const originalURL = req.body.originalURL;
+	if (!/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(originalURL)) {
+		return res.status(422).json({
+			message: "Invalid original URL"
+		});
+	}
+
 	const shortenURL = `${originalURL.startsWith("https") ? "https" : "http"}://pbid.io/${shorten(id.getTimestamp().getTime())}`;
 	const url = new Url({
 		_id: id,
