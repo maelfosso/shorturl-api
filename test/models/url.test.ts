@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Url, UrlDocument } from '../../src/models/Url';
+import { Url } from '../../src/models/Url';
 
 describe("Tests concerning User model", () => {
 
