@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { Url } from '../../src/models/Url';
+import request from "supertest";
+import app from "../../src/app";
+
+// import { Url } from '../../src/models/Url';
 
 describe("Tests concerning Shorten URL API", () => {
 
@@ -10,6 +13,25 @@ describe("Tests concerning Shorten URL API", () => {
         console.log(`MongoDB connection error. Please make sure MongoDB is running. ${err}`);
         // process.exit();
     });
+  });
+
+  describe('POST /api/v1/urls', () => {
+
+    it ('should return 200 OK', () => {
+      return request(app).post('/api/v1/urls')
+          .expect(200);        
+    });
+      
+      
+  });
+
+  describe('GET /api/v1/urls', () => {
+    
+    it ('should return 200 OK', () => {
+      return request(app).get('/api/v1/urls')
+          .expect(200);
+    });
+
   });
 
 });
