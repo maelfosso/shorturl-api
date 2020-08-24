@@ -54,20 +54,35 @@ export const create = (req: Request, res: Response) => {
 		shortenURL
 	});
 
-	url.save((err:any) => {
+	Url.findOne({ originalURL }, (err:any, data: any) => {
 		if (err) {
-			return res.status(402).json({
-				message: "An error occurred",
+			return res.status(500).json({
+				message: "An error occurered",
 				err
 			});
 		}
 
-		return res.status(201).json({
-			message: "URL successfully created",
-			url
-		});
-	});
+		if (data) {
+			return res.status(406).json({
+				message: "URL already shortens"
+			});
+		}	
 	
+		url.save((err:any) => {
+			if (err) {
+				return res.status(500).json({
+					message: "An error occurred",
+					err
+				});
+			}
+	
+			return res.status(201).json({
+				message: "URL successfully created",
+				url
+			});
+		});
+		
+	})
 };
 
 /**
@@ -75,7 +90,7 @@ export const create = (req: Request, res: Response) => {
  * @route GET /api/v1/urls
  */
 export const get = (req: Request, res: Response, next: NextFunction) => {
-  return res.status(201).json({
+  return res.status(200).json({
 		message: "OK",
 		urls: []
 	})

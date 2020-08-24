@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../src/app";
-import { Url, UrlDocument } from '../../src/models/Url';
+import { Url } from '../../src/models/Url';
 
 const http = request(app);
 const API_URL = '/api/v1/urls';
@@ -15,6 +15,10 @@ describe("Tests concerning Shorten URL API", () => {
         console.log(`MongoDB connection error. Please make sure MongoDB is running. ${err}`);
         // process.exit();
     });
+  });
+
+  afterEach(async () => {
+    await Url.deleteMany({});
   });
 
   describe('POST /api/v1/urls', () => {
@@ -31,8 +35,25 @@ describe("Tests concerning Shorten URL API", () => {
       expect(response.body.message).toBe("Invalid original URL");
     });
 
-    it ('should return 20 when the original URL already exists', () => {
+    it ('should return 20 when the original URL already exists', async () => {
+      const valid = {
+        originalURL: "https://microk8s.io/docs/troubleshooting"
+      };
 
+      const invalid = {
+        originalURL: "https://microk8s.io/docs/troubleshooting"
+      };
+
+      let response = await http.post(API_URL)
+        .send(valid);
+      expect(response.status).toBe(201);
+
+      response = await http.post(API_URL)
+        .send(invalid);
+      expect(response.status).toBe(406);
+      expect(response.body.message).toBeDefined();
+      expect(response.body.message).toBe("URL already shortens");
+      expect(response.body.url).not.toBeDefined();
     });
 
     it ('should create a valid shorten URL when is a new valid original URL', async () => {
@@ -57,7 +78,7 @@ describe("Tests concerning Shorten URL API", () => {
     
     it ('should return 200 OK', () => {
       return request(app).get('/api/v1/urls')
-          .expect(201);
+          .expect(200);
     });
 
   });
