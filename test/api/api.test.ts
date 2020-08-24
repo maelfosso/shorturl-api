@@ -81,6 +81,26 @@ describe("Tests concerning Shorten URL API", () => {
           .expect(200);
     });
 
+    it ('should returns all the saved shorten urls', async () => {
+      let valid = {
+        originalURL: "https://microk8s.io/docs/troubleshooting"
+      };
+      let response = await http.post(API_URL)
+        .send(valid);
+      expect(response.status).toBe(201);
+      
+      valid = {
+        originalURL: "https://www.udemy.com/course/valaxy-devops/"
+      };
+      response = await http.post(API_URL)
+        .send(valid);
+      expect(response.status).toBe(201);
+
+      response = await http.get(API_URL);
+      expect(response.status).toBe(200);
+      expect(response.body.urls.length).toBe(2);
+    });
+
   });
 
 });

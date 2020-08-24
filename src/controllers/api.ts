@@ -2,7 +2,7 @@
 
 import { Response, Request, NextFunction } from "express";
 import mongoose from "mongoose";
-import { Url } from "../models/Url";
+import { Url, UrlDocument } from "../models/Url";
 
 
 const shorten = (num: number) => {
@@ -54,7 +54,7 @@ export const create = (req: Request, res: Response) => {
 		shortenURL
 	});
 
-	Url.findOne({ originalURL }, (err:any, data: any) => {
+	Url.findOne({ originalURL }, (err:any, data: UrlDocument) => {
 		if (err) {
 			return res.status(500).json({
 				message: "An error occurered",
@@ -90,8 +90,17 @@ export const create = (req: Request, res: Response) => {
  * @route GET /api/v1/urls
  */
 export const get = (req: Request, res: Response, next: NextFunction) => {
-  return res.status(200).json({
-		message: "OK",
-		urls: []
+	Url.find((err:any, data: UrlDocument[]) => {
+		if (err) {
+			return res.status(500).json({
+				message: "An error occurred",
+				err
+			});
+		}
+
+		return res.status(200).json({
+			message: "OK",
+			urls: data
+		})
 	})
 };
