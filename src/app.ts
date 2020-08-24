@@ -34,5 +34,5 @@ app.use(cors());
  */
 app.post("/api/v1/urls", apiController.create);
 app.get("/api/v1/urls", apiController.get);
-console.log("APP OVER GO");
+
 export default app;
