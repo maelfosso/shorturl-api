@@ -1,13 +1,23 @@
 FROM node:lts-slim
 LABEL maintainer="Mael FOSSO"
 
-WORKDIR /usr/src/app
+RUN apt update &&  apt-get install -y \
+  curl \
+  iputils-ping \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
 
 COPY package*.json ./
 
-RUN npm install && npm run build
+# USER node
 
-COPY . .
+RUN npm install
 
-EXPOSE 8080
-CMD [ "node", "dist/server.js" ]
+COPY --chown=node:node . .
+
+EXPOSE 3000
+
+CMD [ "node", "app.js" ]
