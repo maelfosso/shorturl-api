@@ -14,10 +14,10 @@ COPY package*.json ./
 
 # USER node
 
-RUN npm install
+RUN npm install && npm run build
 
 COPY --chown=node:node . .
 
 EXPOSE 3000
 
-CMD [ "node", "app.js" ]
+CMD [ "node", "dist/server.js" ]
