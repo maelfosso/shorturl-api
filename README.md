@@ -1,4 +1,4 @@
-# ShortURL - API
+# ShortURL - API (Backend)
 
 ## Description
 
@@ -13,12 +13,18 @@ API image for a small Shorturl APP build with Vue.js, Node.js and MongoDB.
 
 ## Features
 
-- Create an Shorturl **[POST] api/v1/urls**
-- Get all the Shorturl **[GET] api/v1/urls**
+- Create a short URL **[POST] api/v1/urls**
+- Get all the short URLs **[GET] api/v1/urls**
 
 ## Live Demo
 
 TBA
+
+## Docker
+
+This project is backend of a whole project. To run them all it's easy to use Docker.
+
+Jump into that repository `https://github.com/maelfosso/startup-files.git` and follow the described steps to run them all as one.
 
 ## Getting Started
 
@@ -51,11 +57,6 @@ npm run prod
 ```
 npm run test
 ```
-## Docker
-
-This project is backend of a whole project. To run them all it's easy to use Docker.
-
-Jump into that repository `https://github.com/maelfosso/startup-files.git` and follow the described steps to run them all as one.
 
 ## Authors
  
