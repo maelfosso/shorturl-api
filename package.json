@@ -14,7 +14,7 @@
     "build-ts": "tsc",
     "dev": "npm-run-all build serve",
     "watch:dev": "nodemon",
-    "prod": "npm-run-all clean build-ts serve",
+    "prod": "NODE_ENV=production npm-run-all build serve",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "serve": "node dist/server.js"
   },
